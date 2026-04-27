@@ -1,9 +1,11 @@
 from pydantic import BaseModel, ConfigDict
 
+
 class ProductCreate(BaseModel):
     sku: str
     name: str
     quantity: float = 0.0
+
 
 class ProductRead(BaseModel):
     model_config = ConfigDict(from_attributes=True)
@@ -11,6 +13,7 @@ class ProductRead(BaseModel):
     sku: str
     name: str
     quantity: float
+
 
 class OperationCreate(BaseModel):
     product_id: int

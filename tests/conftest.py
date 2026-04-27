@@ -1,8 +1,10 @@
 import pytest
 from fastapi.testclient import TestClient
+
+from app.database import SessionLocal, engine, get_db
 from app.main import app
-from app.database import engine, SessionLocal, get_db
 from app.models import Base
+
 
 @pytest.fixture(autouse=True)
 def setup_db():
@@ -10,6 +12,7 @@ def setup_db():
     Base.metadata.create_all(bind=engine)
     yield
     Base.metadata.drop_all(bind=engine)
+
 
 @pytest.fixture
 def client():
@@ -19,10 +22,10 @@ def client():
             yield db
         finally:
             db.close()
-    
+
     app.dependency_overrides[get_db] = override_get_db
-    
+
     with TestClient(app) as c:
         yield c
-    
+
     app.dependency_overrides.clear()
